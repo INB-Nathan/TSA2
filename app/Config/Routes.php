@@ -7,3 +7,5 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Login::index');
 $routes->post('login/authenticate', 'Login::authenticate');
+$routes->get('register', 'Register::index');
+$routes->post('register/submit', 'Register::submit');

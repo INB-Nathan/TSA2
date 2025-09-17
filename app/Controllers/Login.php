@@ -13,12 +13,7 @@ class Login extends Controller
 
     public function authenticate()
     {
-        $username = $this->request->getPost('username');
-        $password = $this->request->getPost('password');
-        // Add authentication logic here
-        if ($username === 'admin' && $password === 'password') {
-            return redirect()->to('/dashboard');
-        }
-        return redirect()->back()->with('error', 'Invalid credentials');
+
+    
     }
 }

@@ -15,5 +15,9 @@
         <br>
         <button type="submit">Login</button>
     </form>
+    <br>
+    <form action="<?= site_url('register') ?>">
+        <button type="submit">Register</button>
+    </form>
 </body>
 </html>
