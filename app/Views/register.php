@@ -73,6 +73,7 @@
     <div class="container">
         <h1>Registration</h1>
         <form action="<?= site_url('register/submit') ?>" method="post">
+            <?= csrf_field() ?>
             <label>First Name:</label>
             <input type="text" name="first_name" required>
             <br>
