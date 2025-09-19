@@ -68,7 +68,10 @@
         }
     </style>
 </head>
-
+<!--
+/**
+* * me thinks tapos na mga security configurations dito, tinamad na ako
+-->
 <body>
     <div class="container">
         <h1>Registration</h1>
@@ -109,15 +112,21 @@
             <br>
             <label>Password:</label>
             <input type="password" name="password" id="password" required autocomplete="new-password">
+            <?php if (!empty($errors['password'])): ?><div style="color:red; font-size:12px;"><?= esc($errors['password']) ?></div><?php endif; ?>
             <br>
             <label>Confirm Password:</label>
-            <input type="password" name="password" id="password" required autocomplete="new-password">
-            <small style="display:block; color:#555; font-size:12px; margin-top:2px;">Min 8 chars, 1 uppercase, 1 special character.</small>
-            <?php if (!empty($errors['password'])): ?><div style="color:red; font-size:12px;"><?= esc($errors['password']) ?></div><?php endif; ?>
+            <input type="password" name="password_confirm" id="password_confirm" required autocomplete="new-password">
+            <?php if (!empty($errors['password_confirm'])): ?><div style="color:red; font-size:12px;"><?= esc($errors['password_confirm']) ?></div><?php endif; ?>
+            <small style="display:block; color:#555; font-size:12px; margin-top:2px;">Min 8 chars, 1 uppercase, 1 digit, 1 special character, no spaces. Must match password.</small>
             <div id="password-error" style="color: red; font-size: 12px; margin-top:4px;"></div>
             <br>
             <label for="terms" style="display:flex; align-items:center; gap:6px;">
                 <input type="checkbox" name="terms" id="terms" value="1" <?= old('terms') ? 'checked' : '' ?> required>
+                <!--
+                /**
+                 * TODO: Change privacy policy into javascript pop up. Reasoning: So no more second page just to view the privacy policy. di ko lam kung kelan basta kung sinipag ako magiging pop up to kapag inde page lang talaga.
+                 */
+                -->
                 <span>I agree to the <a href="<?= site_url('privacy-policy') ?>" target="_blank">privacy policy</a></span>
             </label>
             <?php if (!empty($errors['terms'])): ?><div style="color:red; font-size:12px;"><?= esc($errors['terms']) ?></div><?php endif; ?>
@@ -130,21 +139,30 @@
         </div>
         <script>
             const passwordInput = document.getElementById('password');
+            const confirmInput = document.getElementById('password_confirm');
             const errorDiv = document.getElementById('password-error');
-            const pattern = /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+            const pattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])(?!.*\s).{8,}$/;
 
-            passwordInput.addEventListener('input', () => {
-                const val = passwordInput.value;
-                if (!val) {
+            function validatePasswords() {
+                const pwd = passwordInput.value;
+                const conf = confirmInput.value;
+                if (!pwd && !conf) {
                     errorDiv.textContent = '';
                     return;
                 }
-                if (!pattern.test(val)) {
-                    errorDiv.textContent = 'Password must be at least 8 chars, include 1 uppercase and 1 special character.';
-                } else {
-                    errorDiv.textContent = '';
+                if (pwd && !pattern.test(pwd)) {
+                    errorDiv.textContent = 'Password must be at least 8 chars, include 1 uppercase, 1 digit, 1 special char, and no spaces.';
+                    return;
                 }
-            });
+                if (conf && pwd !== conf) {
+                    errorDiv.textContent = 'Passwords do not match.';
+                    return;
+                }
+                errorDiv.textContent = '';
+            }
+
+            passwordInput.addEventListener('input', validatePasswords);
+            confirmInput.addEventListener('input', validatePasswords);
         </script>
     </div>
 </body>

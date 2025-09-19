@@ -41,11 +41,18 @@ class Register extends Controller
                 ]
             ],
             'password' => [
-                'rules' => 'required|min_length[8]|regex_match[/^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};":\\|,.<>\/?]).{8,}$/]',
+                'rules' => 'required|min_length[8]|regex_match[/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};"\\|,.<>\/?])(?!.*\s).{8,}$/]',
                 'errors' => [
                     'required' => 'Password is required',
                     'min_length' => 'Password must be at least 8 characters',
-                    'regex_match' => 'Password must contain at least one uppercase letter and one special character'
+                    'regex_match' => 'Password must include at least 1 uppercase letter, 1 digit, 1 special character, and no spaces'
+                ]
+            ],
+            'password_confirm' => [
+                'rules' => 'required|matches[password]',
+                'errors' => [
+                    'required' => 'Confirm Password is required',
+                    'matches' => 'Passwords do not match'
                 ]
             ],
             'terms' => [
