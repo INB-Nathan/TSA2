@@ -109,6 +109,9 @@
             <br>
             <label>Password:</label>
             <input type="password" name="password" id="password" required autocomplete="new-password">
+            <br>
+            <label>Confirm Password:</label>
+            <input type="password" name="password" id="password" required autocomplete="new-password">
             <small style="display:block; color:#555; font-size:12px; margin-top:2px;">Min 8 chars, 1 uppercase, 1 special character.</small>
             <?php if (!empty($errors['password'])): ?><div style="color:red; font-size:12px;"><?= esc($errors['password']) ?></div><?php endif; ?>
             <div id="password-error" style="color: red; font-size: 12px; margin-top:4px;"></div>
