@@ -68,7 +68,10 @@
         }
     </style>
 </head>
-
+<!--
+/**
+* * me thinks tapos na mga security configurations dito, tinamad na ako
+-->
 <body>
     <div class="container">
         <h1>Registration</h1>
@@ -119,6 +122,11 @@
             <br>
             <label for="terms" style="display:flex; align-items:center; gap:6px;">
                 <input type="checkbox" name="terms" id="terms" value="1" <?= old('terms') ? 'checked' : '' ?> required>
+                <!--
+                /**
+                 * TODO: Change privacy policy into javascript pop up. Reasoning: So no more second page just to view the privacy policy. di ko lam kung kelan basta kung sinipag ako magiging pop up to kapag inde page lang talaga.
+                 */
+                -->
                 <span>I agree to the <a href="<?= site_url('privacy-policy') ?>" target="_blank">privacy policy</a></span>
             </label>
             <?php if (!empty($errors['terms'])): ?><div style="color:red; font-size:12px;"><?= esc($errors['terms']) ?></div><?php endif; ?>
