@@ -66,12 +66,49 @@
         input[type="checkbox"] {
             margin-right: 8px;
         }
+
+        /* 🔹 Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0,0,0,0.5);
+            text-align: left;
+        }
+
+        .close {
+            float: right;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .privacy-link {
+            color: blue;
+            text-decoration: underline;
+            cursor: pointer;
+        }
     </style>
 </head>
-<!--
-/**
-* * me thinks tapos na mga security configurations dito, tinamad na ako
--->
+
 <body>
     <div class="container">
         <h1>Registration</h1>
@@ -122,12 +159,7 @@
             <br>
             <label for="terms" style="display:flex; align-items:center; gap:6px;">
                 <input type="checkbox" name="terms" id="terms" value="1" <?= old('terms') ? 'checked' : '' ?> required>
-                <!--
-                /**
-                 * TODO: Change privacy policy into javascript pop up. Reasoning: So no more second page just to view the privacy policy. di ko lam kung kelan basta kung sinipag ako magiging pop up to kapag inde page lang talaga.
-                 */
-                -->
-                <span>I agree to the <a href="<?= site_url('privacy-policy') ?>" target="_blank">privacy policy</a></span>
+                <span>I agree to the <span class="privacy-link" id="privacyLink">privacy policy</span></span>
             </label>
             <?php if (!empty($errors['terms'])): ?><div style="color:red; font-size:12px;"><?= esc($errors['terms']) ?></div><?php endif; ?>
             <br>
@@ -137,6 +169,80 @@
             <a href="<?= site_url('/') ?>">Already have an account? Login</a>
             <?php if (session()->get('is_logged_in')): ?> | <a href="<?= site_url('users') ?>">Users List</a><?php endif; ?>
         </div>
+
+        <div id="privacyModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeModal">&times;</span>
+                <h2>Privacy Policy</h2>
+                <p><strong>Effective Date:</strong> September 19, 2025</p>
+                <p>E-Shoppers respect your privacy and are committed to protecting your personal information. This document explains how we collect, use, store, and protect information when you visit or make a purchase from our e-commerce web application.</p>
+                
+                <h3>1. Information We Collect</h3>
+                <p>Account details – your name, email, phone number, and delivery address.<br>
+                Login details – username and password (your password is safely encrypted).<br>
+                Orders – what you buy, payment status, and shipping details.<br>
+                Payments – handled by trusted global payment partners (we never store your full credit/debit card info).<br>
+                Technical info – IP address, device type, and browser details for security and performance.</p>
+
+                <h3>2. How We Use Your Information</h3>
+                <p>Register and manage your account.<br>
+                Process and deliver your orders.<br>
+                Send order confirmations and updates.<br>
+                Provide customer service.<br>
+                Improve our website and shopping experience.<br>
+                Keep our platform secure and prevent fraud.</p>
+
+                <h3>3. Global Users & Consent</h3>
+                <p>E-Shoppers serve users around the world. By using our site, you agree that your data may be stored and processed in different countries where we operate.<br>
+                You must check the “I agree” box before creating an account to show your consent.</p>
+
+                <h3>4. How We Protect Your Data</h3>
+                <p>Encrypted passwords and transactions.<br>
+                Secure connections (SSL/TLS).<br>
+                Limited access for authorized staff only.<br>
+                Regular checks to prevent leaks or attacks.</p>
+
+                <h3>5. Sharing Data</h3>
+                <p>We never sell your personal information. We may share it only with:<br>
+                Payment processors to handle transactions safely.<br>
+                Shipping companies to deliver your orders.<br>
+                Legal authorities if required by law.</p>
+
+                <h3>6. Your Rights</h3>
+                <p>No matter where you live, you can:<br>
+                Ask what data we have about you.<br>
+                Request corrections or updates.<br>
+                Request deletion of your data or account (if not needed for legal reasons).<br>
+                Withdraw your consent at any time.<br>
+                To do this, contact us at <a href="mailto:e-shoppers.admin@gmail.com">e-shoppers.admin@gmail.com</a>.</p>
+
+                <h3>7. Data Retention</h3>
+                <p>We keep your information only as long as needed for orders, services, and legal requirements. After that, we delete it securely.</p>
+
+                <h3>8. Cookie Tracking</h3>
+                <p>We use cookies to:<br>
+                Remember your settings and cart.<br>
+                Improve your shopping experience.<br>
+                Analyze site traffic.<br>
+                You can manage or turn off cookies in your browser settings.</p>
+
+                <h3>9. International Data Transfers</h3>
+                <p>Because E-Shoppers operates globally, your data may be stored in servers outside your country. We take steps to make sure your data stays protected no matter where it is.</p>
+
+                <h3>10. Third-Party Services</h3>
+                <p>E-Shoppers may link to other sites (payment gateways, shipping partners, etc.). Their privacy policies are separate, so we recommend reading them too.</p>
+
+                <h3>11. Changes to This Privacy Policy</h3>
+                <p>E-Shoppers may update this Privacy Policy for major updates within the organisation. If we make changes, we'll send an email to you with the updated privacy policy as well as a form that if you agree with the changes.</p>
+
+                <h3>12. Contact Us</h3>
+                <p>If you have any questions or concerns about this Privacy Policy or your rights, please contact us at:<br>
+                Email: <a href="mailto:e-shoppers@gmail.com">e-shoppers@gmail.com</a><br>
+                Phone: +63 8139226405<br>
+                Address: Padre Paredes St, Sampaloc, Manila, 1015 Metro Manila</p>
+            </div>
+        </div>
+
         <script>
             const passwordInput = document.getElementById('password');
             const confirmInput = document.getElementById('password_confirm');
@@ -163,6 +269,24 @@
 
             passwordInput.addEventListener('input', validatePasswords);
             confirmInput.addEventListener('input', validatePasswords);
+
+            const privacyLink = document.getElementById("privacyLink");
+            const modal = document.getElementById("privacyModal");
+            const closeModal = document.getElementById("closeModal");
+
+            privacyLink.onclick = function () {
+                modal.style.display = "block";
+            }
+
+            document.getElementById("closeModal").onclick = function () {
+                modal.style.display = "none";
+            }
+
+            window.onclick = function (event) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            }
         </script>
     </div>
 </body>
