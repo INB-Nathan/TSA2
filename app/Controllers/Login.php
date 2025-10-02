@@ -15,6 +15,36 @@ class Login extends Controller
     public function authenticate()
     {
         $session = session(); // Start sesh for CI
+        
+        // Validate input
+        $validate = \Config\Services::validation();
+        $validate->setRules([
+            'email' => [
+                'rules' => 'required|valid_email|max_length[255]',
+                'errors' => [
+                    'required' => 'Email is required',
+                    'valid_email' => 'Please provide a valid email address',
+                    'max_length' => 'Email must not exceed 255 characters'
+                ]
+            ],
+            'password' => [
+                'rules' => 'required|min_length[8]|max_length[255]',
+                'errors' => [
+                    'required' => 'Password is required',
+                    'min_length' => 'Password must be at least 8 characters',
+                    'max_length' => 'Password must not exceed 255 characters'
+                ]
+            ]
+        ]);
+
+        if (!$validate->withRequest($this->request)->run()) {
+            // Validation failed
+            $errors = $validate->getErrors();
+            $errorMessage = implode(' ', $errors);
+            $session->setFlashdata('error', $errorMessage);
+            return redirect()->back()->withInput();
+        }
+
         $userModel = new UserModel(); // Create ng model instance, para connected kay DB
 
         $email = trim($this->request->getPost(index: 'email')); // Kunin sa login form yung email and pass
