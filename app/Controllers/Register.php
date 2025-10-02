@@ -19,17 +19,19 @@ class Register extends Controller
         $validate = \Config\Services::validation();
         $validate->setRules([
             'first_name' => [
-                'rules' => 'required|min_length[2]',
+                'rules' => 'required|min_length[2]|max_length[16]',
                 'errors' => [
                     'required' => 'First name is required',
                     'min_length' => 'First name must be at least 2 characters'
+                    'max_length' => 'Last name must be not exceed 16 characters'
                 ]
             ],
             'last_name' => [
-                'rules' => 'required|min_length[2]',
+                'rules' => 'required|min_length[2]|max_length[16]',
                 'errors' => [
                     'required' => 'Last name is required',
                     'min_length' => 'Last name must be at least 2 characters'
+                    'max_length' => 'Last name must be not exceed 16 characters'
                 ]
             ],
             'email' => [
